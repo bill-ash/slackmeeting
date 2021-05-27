@@ -2,16 +2,18 @@
 
 Webhooks for letting the office know when you are in a meeting or on a call. 
 
-Will be a single slash command: 
+Will two slash commands: 
 
 ```
-/inmeeting
+# Start a meeting (toggle lights on) 
+/on
+# End a meeting (toggle lights off)
+/off
 ```
 
 used to control a light wired up to a raspberry pi. 
 
-Middleware loaded to pi use to communicate with Slack vis websocket.  
-
+Middleware loaded to pi used to communicate with Slack via websockets.  
 
 Start systemd service with: 
 
