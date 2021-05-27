@@ -1,17 +1,51 @@
 import os
-# Use the package we installed
+
 from slack_bolt import App
-from dotenv import load_dotenv 
+from slack_bolt.adapter.socket_mode import SocketModeHandler
+
+from dotenv import load_dotenv
+from gpiozero import LED
+from time import sleep
+
+led1 = LED(18)
+led2 = LED(14)
+led3 = LED(15)
+led4 = LED(23)
+
 
 load_dotenv()
 
-print(os.getenv('SLACK_SIGNING_SECRET'))
 
-# Initializes your app with your bot token and signing secret
-app = App(
-    token=os.environ.get("SLACK_BOT_TOKEN"),
-    signing_secret=os.environ.get("SLACK_SIGNING_SECRET")
-)
+# Install the Slack app and get xoxb- token in advance
+app = App(token=os.environ["SLACK_BOT_TOKEN"])
+
+
+@app.command("/on")
+def on(ack, body, logger):
+    ack()
+    logger.info(body)
+    led1.on()
+    sleep(1)
+    led2.on()
+    sleep(1)
+    led3.on()
+    sleep(1)
+    led4.on()
+   
+@app.command("/off")
+def close_light(ack, body, logger): 
+    ack()
+    logger.info(body)
+    led1.off() 
+    led1.off()
+    sleep(1)
+    led2.off()
+    sleep(1)
+    led3.off()
+    sleep(1)
+    led4.off()
+    sleep(1)
+
 
 @app.event("app_home_opened")
 def update_home_tab(client, event, logger):
@@ -31,7 +65,7 @@ def update_home_tab(client, event, logger):
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": "*Welcome to your _App's Home_* :tada:"
+              "text": "*Welcome to Meeting Bot!* :tada:"
             }
           },
           {
@@ -41,20 +75,8 @@ def update_home_tab(client, event, logger):
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": "This button won't do much for now but you can set up a listener for it using the `actions()` method and passing its unique `action_id`. See an example in the `examples` folder within your Bolt app."
+              "text": "Meeting bot let's the office know when you are on an important call. Use the command `/on` to let people know you are in meeting. When you are finished, `/off` will let people know you have finished."
             }
-          },
-          {
-            "type": "actions",
-            "elements": [
-              {
-                "type": "button",
-                "text": {
-                  "type": "plain_text",
-                  "text": "Click me!"
-                }
-              }
-            ]
           }
         ]
       }
@@ -65,7 +87,7 @@ def update_home_tab(client, event, logger):
 
 
 
-
-# Start your app
 if __name__ == "__main__":
-    app.start(port=int(os.environ.get("PORT", 3000)))
+    SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
+
+
