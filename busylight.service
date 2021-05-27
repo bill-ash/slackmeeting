@@ -1,0 +1,13 @@
+[Unit]
+Description=BusyLight
+After=network.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/python_projects/slackmeeting
+ExecStart=python3 app.py
+Restart=always
+Environment=.env
+
+[Install]
+WantedBy=multi-user.target
