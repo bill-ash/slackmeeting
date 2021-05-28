@@ -4,14 +4,7 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 from dotenv import load_dotenv
-from gpiozero import LED
-from time import sleep
-
-led1 = LED(18)
-led2 = LED(14)
-led3 = LED(15)
-led4 = LED(23)
-
+from flash import lights_on, lights_off
 
 load_dotenv()
 
@@ -24,28 +17,13 @@ app = App(token=os.environ["SLACK_BOT_TOKEN"])
 def on(ack, body, logger):
     ack()
     logger.info(body)
-    led1.on()
-    sleep(1)
-    led2.on()
-    sleep(1)
-    led3.on()
-    sleep(1)
-    led4.on()
-   
+    lights_on()
+
 @app.command("/off")
 def close_light(ack, body, logger): 
     ack()
     logger.info(body)
-    led1.off() 
-    led1.off()
-    sleep(1)
-    led2.off()
-    sleep(1)
-    led3.off()
-    sleep(1)
-    led4.off()
-    sleep(1)
-
+    lights_off()
 
 @app.event("app_home_opened")
 def update_home_tab(client, event, logger):
