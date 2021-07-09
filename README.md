@@ -22,3 +22,6 @@ Start systemd service with:
 - Enable the service: `sudo systemctl enable busylight`.
 
 
+```
+ping raspberrypi.local
+```
